@@ -1,0 +1,118 @@
+/* ============================================================
+   wiki.hostaka.fun — منشور فردي (/:extension/:token)
+   ============================================================ */
+body.page-wiki-post {background:var(--bg);color:var(--text);min-height:100vh;font-family:'Ubuntu','El Messiri',sans-serif;}
+body.page-wiki-post .topbar {
+  position:sticky; top:0; left:0; right:0; height:58px; background:var(--topbar-bg);
+  backdrop-filter:blur(24px) saturate(1.3); -webkit-backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px;
+  padding:0 16px; z-index:50;
+}
+body.page-wiki-post .back-btn {
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+  display:flex; align-items:center; justify-content:center; color:var(--text); flex-shrink:0; text-decoration:none;
+}
+body.page-wiki-post .icon-btn {
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text);
+  transition:all var(--transition-fast); flex-shrink:0;
+}
+body.page-wiki-post .icon-btn:hover {background:var(--primary-light);border-color:var(--primary-border);color:var(--primary);}
+body.page-wiki-post .topbar-spacer {flex:1;}
+body.page-wiki-post .lang-selector {position:relative;}
+body.page-wiki-post .lang-menu {
+  position:absolute; top:calc(100% + 6px); left:0;
+  background:var(--modal-bg); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:6px 0; opacity:0; visibility:hidden; transform:translateY(-6px) scale(0.97);
+  transition:all 0.2s cubic-bezier(0.16,1,0.3,1); z-index:60; box-shadow:var(--shadow-lg); overflow:hidden; min-width:120px;
+}
+body.page-wiki-post .lang-menu.show {opacity:1; visibility:visible; transform:translateY(0) scale(1);}
+body.page-wiki-post .lang-menu button {display:block; width:100%; padding:9px 14px; background:none; border:none; color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.85rem; cursor:pointer; text-align:right;}
+body.page-wiki-post .lang-menu button:hover {background:var(--primary-light); color:var(--primary);}
+body.page-wiki-post .acc-row {display:flex;align-items:center;gap:8px;}
+body.page-wiki-post .acc-avatar, body.page-wiki-post .acc-avatar-fallback {width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--avatar-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;}
+body.page-wiki-post .acc-name {font-size:0.82rem;font-weight:700;color:var(--text);}
+
+body.page-wiki-post .wiki-wrap {max-width:680px;margin:0 auto;padding:20px 16px 60px;}
+
+body.page-wiki-post .breadcrumb {font-size:0.8rem; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+body.page-wiki-post .breadcrumb a {color:var(--primary); text-decoration:none; font-weight:700;}
+
+body.page-wiki-post .reply-banner {display:flex; align-items:center; gap:8px; background:var(--primary-light); color:var(--primary); border-radius:var(--radius-md); padding:10px 14px; font-size:0.84rem; margin-bottom:16px; text-decoration:none;}
+
+body.page-wiki-post .post-box {border:1px solid var(--border); border-radius:var(--radius-md); background:var(--card); padding:18px; margin-bottom:20px;}
+body.page-wiki-post .post-author-row {display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+body.page-wiki-post .post-avatar {width:34px;height:34px;border-radius:50%;background:var(--avatar-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;overflow:hidden;}
+body.page-wiki-post .post-avatar img {width:100%;height:100%;object-fit:cover;}
+body.page-wiki-post .post-author-name {font-weight:800; font-size:0.88rem;}
+body.page-wiki-post .admin-badge {background:var(--primary); color:#fff; font-size:0.65rem; font-weight:800; padding:2px 7px; border-radius:var(--radius-full);}
+body.page-wiki-post .post-date {font-size:0.76rem; color:var(--muted); margin-right:auto;}
+body.page-wiki-post .post-title {font-weight:900; font-size:1.15rem; margin-bottom:10px; line-height:1.4;}
+body.page-wiki-post .post-body {font-size:0.92rem; line-height:1.85; color:var(--text); white-space:pre-wrap; margin-bottom:12px;}
+body.page-wiki-post .post-image {max-width:100%; border-radius:var(--radius-md); box-shadow:var(--shadow); display:block; margin-bottom:12px; cursor:pointer;}
+body.page-wiki-post .post-actions {display:flex; gap:8px; margin-top:10px;}
+body.page-wiki-post .post-actions button {
+  padding:6px 14px; border-radius:var(--radius-full); border:1px solid var(--border); background:var(--card);
+  color:var(--text); font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.78rem; cursor:pointer;
+}
+body.page-wiki-post .post-actions button:hover {border-color:var(--primary-border); color:var(--primary);}
+body.page-wiki-post .post-actions button.danger:hover {border-color:var(--danger); color:var(--danger);}
+
+body.page-wiki-post .edit-form textarea, body.page-wiki-post .edit-form input[type="text"] {
+  width:100%; padding:10px 13px; border-radius:var(--radius-md); border:1px solid var(--border);
+  background:var(--input-bg); color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.86rem; outline:none; margin-bottom:8px;
+}
+body.page-wiki-post .edit-form textarea {min-height:100px; resize:vertical;}
+body.page-wiki-post .edit-form-actions {display:flex; gap:8px;}
+body.page-wiki-post .edit-form-actions button {
+  padding:8px 18px; border-radius:var(--radius-full); border:none; font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.82rem; cursor:pointer;
+}
+body.page-wiki-post .edit-form-actions .save-btn {background:var(--primary); color:#fff;}
+body.page-wiki-post .edit-form-actions .cancel-btn {background:var(--card); color:var(--text); border:1px solid var(--border) !important;}
+
+body.page-wiki-post .section-title {font-weight:800; font-size:0.98rem; margin-bottom:12px;}
+
+body.page-wiki-post .reply-form {background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; margin-bottom:18px;}
+body.page-wiki-post .reply-form textarea {
+  width:100%; min-height:70px; padding:11px 14px; border-radius:var(--radius-md); border:1px solid var(--border);
+  background:var(--input-bg); color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.86rem; resize:vertical; outline:none; margin-bottom:10px;
+}
+body.page-wiki-post .reply-form-footer {display:flex; align-items:center; justify-content:space-between; gap:10px;}
+body.page-wiki-post .reply-image-btn {
+  padding:7px 12px; border-radius:var(--radius-full); border:1px solid var(--border); background:var(--bg);
+  color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.76rem; cursor:pointer; display:flex; align-items:center; gap:5px;
+}
+body.page-wiki-post .reply-submit-btn {
+  padding:8px 20px; border-radius:var(--radius-full); background:var(--primary); color:#fff; border:none;
+  font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.82rem; cursor:pointer;
+}
+body.page-wiki-post .reply-preview {max-width:90px; border-radius:var(--radius-sm); margin-top:8px; display:block;}
+body.page-wiki-post .login-hint {text-align:center;padding:16px;color:var(--muted);font-size:0.85rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:18px;}
+body.page-wiki-post .login-hint a {color:var(--primary);font-weight:700;text-decoration:none;}
+
+body.page-wiki-post .reply-item {border-right:2px solid var(--border); padding:12px 0 12px 0; padding-right:14px; margin-bottom:4px;}
+body.page-wiki-post .reply-item .post-author-row {margin-bottom:6px;}
+body.page-wiki-post .reply-item .post-body {font-size:0.86rem; margin-bottom:8px;}
+body.page-wiki-post .reply-item .post-avatar {width:26px;height:26px;font-size:0.7rem;}
+body.page-wiki-post .reply-item-footer {display:flex; gap:10px; align-items:center;}
+body.page-wiki-post .reply-item-footer a, body.page-wiki-post .reply-item-footer button {
+  font-size:0.76rem; color:var(--muted); background:none; border:none; cursor:pointer; text-decoration:none; font-family:'Ubuntu','El Messiri';
+}
+body.page-wiki-post .reply-item-footer a:hover, body.page-wiki-post .reply-item-footer button:hover {color:var(--primary);}
+
+body.page-wiki-post .not-found {text-align:center;padding:80px 20px;color:var(--muted);}
+body.page-wiki-post .not-found svg {opacity:0.5;margin-bottom:14px;}
+
+body.page-wiki-post .lightbox {position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;visibility:hidden;transition:opacity 0.2s;}
+body.page-wiki-post .lightbox.show {opacity:1;visibility:visible;}
+body.page-wiki-post .lightbox img {max-width:92vw;max-height:88vh;border-radius:var(--radius-sm);}
+body.page-wiki-post .lightbox-close {position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;}
+
+body.page-wiki-post .loader {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:100;}
+body.page-wiki-post .spinner {width:34px;height:34px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--primary);animation:wpost-spin 0.8s linear infinite;}
+@keyframes wpost-spin {to {transform:rotate(360deg);}}
+
+body.page-wiki-post #toastHost {position:fixed;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:24px;pointer-events:none;z-index:999;}
+body.page-wiki-post .toast {background:var(--primary);color:#fff;padding:11px 22px;border-radius:var(--radius-sm);font-size:0.85rem;font-weight:700;opacity:0;transition:opacity var(--transition-base);max-width:90vw;text-align:center;}
+body.page-wiki-post .toast.show {opacity:1;}
+body.page-wiki-post .toast.toast-error {background:var(--danger);}
