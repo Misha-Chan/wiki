@@ -1,0 +1,82 @@
+/* ============================================================
+   wiki.hostaka.fun — منشور جديد (/new)
+   ============================================================ */
+body.page-wiki-new {background:var(--bg);color:var(--text);min-height:100vh;font-family:'Ubuntu','El Messiri',sans-serif;}
+body.page-wiki-new .topbar {
+  position:sticky; top:0; left:0; right:0; height:58px; background:var(--topbar-bg);
+  backdrop-filter:blur(24px) saturate(1.3); -webkit-backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px;
+  padding:0 16px; z-index:50;
+}
+body.page-wiki-new .back-btn {
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+  display:flex; align-items:center; justify-content:center; color:var(--text); flex-shrink:0; text-decoration:none;
+}
+body.page-wiki-new .icon-btn {
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text);
+  transition:all var(--transition-fast); flex-shrink:0;
+}
+body.page-wiki-new .icon-btn:hover {background:var(--primary-light);border-color:var(--primary-border);color:var(--primary);}
+body.page-wiki-new .topbar-title {font-weight:900;font-size:1rem;}
+body.page-wiki-new .topbar-spacer {flex:1;}
+body.page-wiki-new .lang-selector {position:relative;}
+body.page-wiki-new .lang-menu {
+  position:absolute; top:calc(100% + 6px); left:0;
+  background:var(--modal-bg); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:6px 0; opacity:0; visibility:hidden; transform:translateY(-6px) scale(0.97);
+  transition:all 0.2s cubic-bezier(0.16,1,0.3,1); z-index:60; box-shadow:var(--shadow-lg); overflow:hidden; min-width:120px;
+}
+body.page-wiki-new .lang-menu.show {opacity:1; visibility:visible; transform:translateY(0) scale(1);}
+body.page-wiki-new .lang-menu button {display:block; width:100%; padding:9px 14px; background:none; border:none; color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.85rem; cursor:pointer; text-align:right;}
+body.page-wiki-new .lang-menu button:hover {background:var(--primary-light); color:var(--primary);}
+body.page-wiki-new .acc-row {display:flex;align-items:center;gap:8px;}
+body.page-wiki-new .acc-avatar, body.page-wiki-new .acc-avatar-fallback {width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--avatar-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;}
+body.page-wiki-new .acc-name {font-size:0.82rem;font-weight:700;color:var(--text);}
+
+body.page-wiki-new .new-wrap {max-width:560px;margin:0 auto;padding:24px 16px 60px;}
+body.page-wiki-new .page-heading {font-weight:900;font-size:1.25rem;margin-bottom:20px;}
+
+body.page-wiki-new .field {margin-bottom:18px;}
+body.page-wiki-new .field label {display:block;font-weight:700;font-size:0.84rem;margin-bottom:8px;}
+body.page-wiki-new .field input[type="text"], body.page-wiki-new .field textarea {
+  width:100%; padding:11px 14px; border-radius:var(--radius-md); border:1px solid var(--border);
+  background:var(--input-bg); color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.88rem; outline:none;
+}
+body.page-wiki-new .field input[type="text"].ext-input {direction:ltr; text-align:right;}
+body.page-wiki-new .field textarea {min-height:130px; resize:vertical;}
+body.page-wiki-new .field-hint {font-size:0.74rem;color:var(--muted);margin-top:5px;}
+
+body.page-wiki-new .image-picker {display:flex;align-items:center;gap:14px;}
+body.page-wiki-new .image-preview {width:72px;height:72px;border-radius:var(--radius-md);overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;}
+body.page-wiki-new .image-preview img {width:100%;height:100%;object-fit:cover;}
+body.page-wiki-new .upload-btn {
+  padding:9px 16px; border-radius:var(--radius-full); border:1px solid var(--border); background:var(--card);
+  color:var(--text); font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.82rem; cursor:pointer;
+}
+body.page-wiki-new .upload-btn:hover {border-color:var(--primary-border);color:var(--primary);}
+
+body.page-wiki-new .submit-btn {
+  width:100%; padding:13px; border-radius:var(--radius-full); background:var(--primary); color:#fff; border:none;
+  font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.92rem; cursor:pointer; transition:all var(--transition-fast);
+}
+body.page-wiki-new .submit-btn:hover {background:var(--primary-h);}
+body.page-wiki-new .submit-btn:disabled {opacity:0.6;cursor:default;}
+
+body.page-wiki-new .gate-box, body.page-wiki-new .success-box {text-align:center;padding:60px 20px;}
+body.page-wiki-new .gate-box svg, body.page-wiki-new .success-box svg {color:var(--primary);margin-bottom:16px;}
+body.page-wiki-new .gate-box-title, body.page-wiki-new .success-box-title {font-weight:900;font-size:1.15rem;margin-bottom:8px;}
+body.page-wiki-new .gate-box-desc, body.page-wiki-new .success-box-desc {color:var(--muted);font-size:0.9rem;margin-bottom:22px;line-height:1.7;}
+body.page-wiki-new .gate-btn, body.page-wiki-new .success-btn {
+  display:inline-flex; padding:11px 26px; border-radius:var(--radius-full); background:var(--primary); color:#fff;
+  border:none; font-family:'Ubuntu','El Messiri'; font-weight:700; font-size:0.88rem; cursor:pointer; text-decoration:none;
+}
+
+body.page-wiki-new .loader {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:100;}
+body.page-wiki-new .spinner {width:34px;height:34px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--primary);animation:wnew-spin 0.8s linear infinite;}
+@keyframes wnew-spin {to {transform:rotate(360deg);}}
+
+body.page-wiki-new #toastHost {position:fixed;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:24px;pointer-events:none;z-index:999;}
+body.page-wiki-new .toast {background:var(--primary);color:#fff;padding:11px 22px;border-radius:var(--radius-sm);font-size:0.85rem;font-weight:700;opacity:0;transition:opacity var(--transition-base);max-width:90vw;text-align:center;}
+body.page-wiki-new .toast.show {opacity:1;}
+body.page-wiki-new .toast.toast-error {background:var(--danger);}

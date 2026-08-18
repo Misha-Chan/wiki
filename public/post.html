@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html class="page-wiki-post" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="/wiki-icon.png" type="image/png">
+<title>Hostaka Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/post.css">
+<link rel="stylesheet" href="/emoji.css">
+<script src="/i18n.js"></script>
+<script src="/modal.js"></script>
+<script src="/emoji.js" defer></script>
+<script src="/protect.js" defer></script>
+</head>
+<body class="page-wiki-post">
+
+<div class="loader" id="loader"><div class="spinner"></div></div>
+
+<div class="topbar">
+  <a href="/" class="back-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+  <div class="topbar-spacer"></div>
+  <div class="lang-selector" id="langToggle">
+    <button class="icon-btn" onclick="toggleLangMenu()" data-i18n-title="common.changeLanguage" title="Change language">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </button>
+    <div class="lang-menu" id="langMenu">
+      <button onclick="setLang('ar')">العربية</button>
+      <button onclick="setLang('en')">English</button>
+    </div>
+  </div>
+  <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" data-i18n-title="common.toggleTheme" title="Toggle theme">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+  <div id="authArea">
+    <button class="icon-btn" onclick="goToLogin()" data-i18n-title="common.login" title="Log in">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="wiki-wrap">
+  <div id="postWrap"></div>
+
+  <div id="sectionTitleWrap" style="display:none;">
+    <div class="section-title" data-i18n="post.repliesTitle">Replies</div>
+    <div id="replyFormArea"></div>
+    <div id="repliesList"></div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<div id="toastHost"></div>
+
+<script src="/shared.js" defer></script>
+<script src="/common.js" defer></script>
+<script src="/post.js" defer></script>
+</body>
+</html>
