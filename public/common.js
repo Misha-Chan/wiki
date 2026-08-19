@@ -134,8 +134,66 @@ function fileToBase64(file){
     reader.readAsDataURL(file);
   });
 }
-async function uploadImage(file){
-  const base64 = await fileToBase64(file);
+function blobToDataUrl(blob){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+// يضغط/يصغّر الصورة بالمتصفح قبل الرفع. هذا ضروري وليس تحسين اختياري:
+// أي Serverless Function على Vercel (هذا النطاق، وأيضاً hostaka.fun نفسه
+// اللي يستقبل الطلب بعدين) عنده حد صارم 4.5 ميجابايت لحجم جسم الطلب —
+// حد على مستوى المنصة، ما ينضبط من إعدادات الكود إطلاقاً. صور الجوالات
+// عادةً 2-8 ميجا، وترمّز base64 بتكبر ~37% فوق هذا — فبدون هذا الضغط
+// يفشل الرفع بصمت (يعلّق بدون رسالة خطأ) بالإنتاج فقط، لأن هذا القيد مو
+// موجود محلياً أثناء التطوير (Express نفسه ما عنده هذا الحد).
+// نجرب PNG أول (يحافظ على الشفافية، مهم لأيقونات التطبيقات)، ولو طلعت
+// كبيرة برضو نرجع لـ JPEG مضغوط (يفقد الشفافية، لكن يضمن نجاح الرفع).
+function compressImageForUpload(file, maxDim = 1600){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objUrl);
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width >= height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+        else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const SAFE_BYTES = 3 * 1024 * 1024; // هامش أمان تحت حد الـ4.5 ميجا (بعد base64 يكبر ~37%)
+      canvas.toBlob((pngBlob) => {
+        if (pngBlob && pngBlob.size <= SAFE_BYTES) {
+          blobToDataUrl(pngBlob).then(resolve).catch(reject);
+        } else {
+          canvas.toBlob((jpgBlob) => {
+            if (!jpgBlob) { reject(new Error('compress failed')); return; }
+            blobToDataUrl(jpgBlob).then(resolve).catch(reject);
+          }, 'image/jpeg', 0.82);
+        }
+      }, 'image/png');
+    };
+    img.onerror = () => { URL.revokeObjectURL(objUrl); reject(new Error('image load failed')); };
+    img.src = objUrl;
+  });
+}
+async function uploadImage(file, maxDim = 1600){
+  let base64;
+  try {
+    base64 = await compressImageForUpload(file, maxDim);
+  } catch (e) {
+    base64 = await fileToBase64(file); // احتياط لو فشل الضغط لأي سبب (نوع ملف غير مدعوم بـ canvas مثلاً)
+  }
+  const approxBytes = base64.length * 0.75; // تقدير حجم البيانات الفعلي من طول base64
+  if (approxBytes > 4 * 1024 * 1024) {
+    throw new Error('الصورة كبيرة جداً حتى بعد الضغط، جرب صورة أصغر');
+  }
   const d = await apiFetch('/api/upload', 'POST', { image: base64 });
   if (!d || !d.url) throw new Error(d?.error || 'upload failed');
   return d.url;
