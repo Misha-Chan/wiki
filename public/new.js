@@ -47,7 +47,10 @@ function renderForm(){
 
     <div class="field">
       <label data-i18n="new.bodyLabel">Details</label>
-      <textarea id="fBody" data-i18n-placeholder="new.bodyPlaceholder" placeholder="Describe the issue in detail..." maxlength="5000"></textarea>
+      <div style="position:relative;">
+        <textarea id="fBody" data-i18n-placeholder="new.bodyPlaceholder" placeholder="Describe the issue in detail..." maxlength="5000"></textarea>
+        <button type="button" class="btn-icon-sm femoji-comment-btn" data-target="fBody" style="position:absolute;bottom:8px;left:8px;" title="Emoji">🙂</button>
+      </div>
     </div>
 
     <div class="field">

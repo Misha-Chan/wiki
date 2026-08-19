@@ -44,7 +44,7 @@ body.page-wiki-new .field input[type="text"], body.page-wiki-new .field textarea
   background:var(--input-bg); color:var(--text); font-family:'Ubuntu','El Messiri'; font-size:0.88rem; outline:none;
 }
 body.page-wiki-new .field input[type="text"].ext-input {direction:ltr; text-align:right;}
-body.page-wiki-new .field textarea {min-height:130px; resize:vertical;}
+body.page-wiki-new .field textarea {min-height:130px; resize:vertical; padding-bottom:36px;}
 body.page-wiki-new .field-hint {font-size:0.74rem;color:var(--muted);margin-top:5px;}
 
 body.page-wiki-new .image-picker {display:flex;align-items:center;gap:14px;}
