@@ -10,6 +10,7 @@ function getPathParts(){
 }
 function currentLangSafe(){ return (window.currentLang === 'ar') ? 'ar' : 'en'; }
 function fmtDate(iso){ try { return new Date(iso).toLocaleDateString(currentLangSafe(), { year:'numeric', month:'short', day:'numeric' }); } catch (e) { return iso; } }
+function renderEmoji(text){ return window.EmojiFluent ? EmojiFluent.render(text) : text; }
 
 function renderNotFound(){
   document.getElementById('postWrap').innerHTML = `
@@ -55,8 +56,8 @@ function renderPostBox(p, extension){
       ${authorRowHtml(p)}
       ${p.is_comment
         ? `<div class="post-title" style="font-size:0.95rem;">${t('post.replyTo')} @${esc(p.mentioned_username||'')}</div>`
-        : `<div class="post-title">${esc(p.title)}</div>`}
-      <div class="post-body">${esc(p.body)}</div>
+        : `<div class="post-title">${renderEmoji(esc(p.title))}</div>`}
+      <div class="post-body">${renderEmoji(esc(p.body))}</div>
       ${p.image ? `<img class="post-image" src="${esc(p.image)}" onclick="openLightbox('${esc(p.image)}')" alt="">` : ''}
       ${isMine ? `
         <div class="post-actions">
@@ -74,7 +75,10 @@ function startEdit(){
   box.innerHTML = `
     <div class="edit-form">
       ${!p.is_comment ? `<input type="text" id="editTitle" value="${esc(p.title)}" maxlength="150">` : ''}
-      <textarea id="editBody" maxlength="5000">${esc(p.body)}</textarea>
+      <div style="position:relative;">
+        <textarea id="editBody" maxlength="5000" style="padding-bottom:36px;">${esc(p.body)}</textarea>
+        <button type="button" class="btn-icon-sm femoji-comment-btn" data-target="editBody" style="position:absolute;bottom:8px;left:8px;" title="Emoji">🙂</button>
+      </div>
       <div class="edit-form-actions">
         <button class="save-btn" onclick="saveEdit()" data-i18n="post.save">Save</button>
         <button class="cancel-btn" onclick="renderPostBox(CURRENT_POST, getPathParts().extension)" data-i18n="post.cancel">Cancel</button>
@@ -132,7 +136,7 @@ function replyItemHtml(extension, r){
         ${r.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
         <span class="post-date">${fmtDate(r.created_at)}</span>
       </div>
-      <div class="post-body">${esc(r.body)}</div>
+      <div class="post-body">${renderEmoji(esc(r.body))}</div>
       ${r.image ? `<img src="${esc(r.image)}" style="max-width:110px;border-radius:8px;display:block;margin-bottom:6px;">` : ''}
       <div class="reply-item-footer">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -161,7 +165,10 @@ function renderReplyFormArea(){
   if (CURRENT_USER) {
     area.innerHTML = `
       <div class="reply-form">
-        <textarea id="replyBody" data-i18n-placeholder="post.replyPlaceholder" placeholder="Write a reply..." maxlength="5000"></textarea>
+        <div style="position:relative;">
+          <textarea id="replyBody" data-i18n-placeholder="post.replyPlaceholder" placeholder="Write a reply..." maxlength="5000" style="padding-bottom:36px;"></textarea>
+          <button type="button" class="btn-icon-sm femoji-comment-btn" data-target="replyBody" style="position:absolute;bottom:8px;left:8px;" title="Emoji">🙂</button>
+        </div>
         <div id="replyImgPreviewWrap"></div>
         <div class="reply-form-footer">
           <button type="button" class="reply-image-btn" onclick="document.getElementById('replyImgInput').click()">
