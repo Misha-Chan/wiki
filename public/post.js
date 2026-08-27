@@ -32,10 +32,9 @@ window.openLightbox = openLightbox;
 window.closeLightbox = closeLightbox;
 
 function authorRowHtml(p){
-  const initial = esc((p.author.display_name || p.author.username || '?').charAt(0).toUpperCase());
   return `
     <div class="post-author-row">
-      <div class="post-avatar">${p.author.avatar ? `<img src="${esc(p.author.avatar)}" alt="">` : initial}</div>
+      <div class="post-avatar">${p.author.avatar ? `<img src="${esc(p.author.avatar)}" alt="">` : `<img src="/default-avatar.jpg" alt="">`}</div>
       <span class="post-author-name">${esc(p.author.display_name || p.author.username)}</span>
       ${p.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
       <span class="post-date">${fmtDate(p.created_at)}</span>
@@ -127,11 +126,10 @@ async function deleteThisPost(){
 window.deleteThisPost = deleteThisPost;
 
 function replyItemHtml(extension, r){
-  const initial = esc((r.author.display_name || r.author.username || '?').charAt(0).toUpperCase());
   return `
     <a class="reply-item" style="text-decoration:none;color:inherit;display:block;" href="/${encodeURIComponent(extension)}/${encodeURIComponent(r.token)}">
       <div class="post-author-row">
-        <div class="post-avatar">${r.author.avatar ? `<img src="${esc(r.author.avatar)}" alt="">` : initial}</div>
+        <div class="post-avatar">${r.author.avatar ? `<img src="${esc(r.author.avatar)}" alt="">` : `<img src="/default-avatar.jpg" alt="">`}</div>
         <span class="post-author-name">${esc(r.author.display_name || r.author.username)}</span>
         ${r.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
         <span class="post-date">${fmtDate(r.created_at)}</span>

@@ -121,7 +121,58 @@ app.get('/new', (req, res) => {
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 app.get('/robots.txt', (req, res) => {
-  res.type('text/plain').send('User-agent: *\nAllow: /\nDisallow: /new\n');
+  const origin = `https://${req.get('host')}`;
+  res.type('text/plain').send(`User-agent: *\nAllow: /\nDisallow: /new\n\nSitemap: ${origin}/sitemap.xml\n`);
+});
+
+// ============================================================
+// sitemap.xml — Wiki (wiki.hostaka.fun), part of the Hostaka Ecosystem.
+// Hostaka Wiki — Hostaka's community wiki: documented posts and threads,
+// grouped by topic. Dynamically generated from the main Hostaka API
+// (every extension/topic + every post under it), same pattern used by
+// hostaka.fun/sitemap.xml, so Google can discover and index this
+// subdomain's content directly instead of waiting on random crawling.
+// ============================================================
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const origin = `https://${req.get('host')}`;
+    const urls = [];
+    const addUrl = (loc, lastmod, priority) => {
+      urls.push(`  <url><loc>${ogEscape(loc)}</loc>${lastmod ? `<lastmod>${new Date(lastmod).toISOString()}</lastmod>` : ''}<priority>${priority}</priority></url>`);
+    };
+
+    addUrl(`${origin}/`, null, '1.0');
+
+    try {
+      const r = await fetch(`${HOSTAKA_API_BASE}/api/wiki/extensions`);
+      if (r.ok) {
+        const extensions = await r.json();
+        for (const e of extensions) {
+          const ext = e.extension || e.name || e;
+          if (!ext) continue;
+          addUrl(`${origin}/${encodeURIComponent(ext)}`, null, '0.7');
+          try {
+            const rp = await fetch(`${HOSTAKA_API_BASE}/api/wiki/extensions/${encodeURIComponent(ext)}/posts`);
+            if (rp.ok) {
+              const posts = await rp.json();
+              for (const p of posts) {
+                if (p.token) addUrl(`${origin}/${encodeURIComponent(ext)}/${encodeURIComponent(p.token)}`, p.created_at, '0.5');
+              }
+            }
+          } catch (e2) { console.warn('sitemap: could not fetch posts for extension', ext, e2.message); }
+        }
+      }
+    } catch (e) { console.warn('sitemap: could not fetch extensions', e.message); }
+
+    res.type('application/xml').send(
+`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('\n')}
+</urlset>`);
+  } catch (e) {
+    console.error('❌ sitemap generation failed:', e);
+    res.status(500).type('text/plain').send('sitemap generation failed');
+  }
 });
 
 // صفحة امتداد/موضوع (/:extension) — قائمة كل المنشورات الأصلية تحته
@@ -150,6 +201,7 @@ app.get('/:extension/:token', async (req, res) => {
           meta.title = post.title ? `${post.title} · ${SITE_NAME}` : `رد من @${post.author?.username || ''} · ${SITE_NAME}`;
           meta.description = ogTruncate(post.body) || DEFAULT_DESC;
           if (post.image) meta.image = absUrl(post.image);
+          else meta.image = `${HOSTAKA_API_BASE}/api/og-image?type=wiki&brand=wiki&token=${encodeURIComponent(tok)}`;
         }
       }
     } catch (e) {

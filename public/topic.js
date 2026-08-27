@@ -14,11 +14,10 @@ function currentLangSafe(){ return (window.currentLang === 'ar') ? 'ar' : 'en'; 
 function renderEmoji(text){ return window.EmojiFluent ? EmojiFluent.render(text) : text; }
 
 function postCardHtml(ext, p){
-  const initial = esc((p.author.display_name || p.author.username || '?').charAt(0).toUpperCase());
   return `
     <a class="post-card" href="/${encodeURIComponent(ext)}/${encodeURIComponent(p.token)}">
       <div class="post-author-row">
-        <div class="post-avatar">${p.author.avatar ? `<img src="${esc(p.author.avatar)}" alt="">` : initial}</div>
+        <div class="post-avatar">${p.author.avatar ? `<img src="${esc(p.author.avatar)}" alt="">` : `<img src="/default-avatar.jpg" alt="">`}</div>
         <span class="post-author-name">${esc(p.author.display_name || p.author.username)}</span>
         ${p.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
         <span class="post-date">${timeAgoOrDate(p.created_at)}</span>
