@@ -49,6 +49,7 @@ function setLang(lang){
 
 // ===== أدوات عامة =====
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escJs(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,'\\n'); }
 function getToken(){ return localStorage.getItem('hostaka_token') || ''; }
 
 function showToast(msg, type='success'){
