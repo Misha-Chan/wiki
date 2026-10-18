@@ -57,7 +57,7 @@ function renderPostBox(p, extension){
         ? `<div class="post-title" style="font-size:0.95rem;">${t('post.replyTo')} @${esc(p.mentioned_username||'')}</div>`
         : `<div class="post-title">${renderEmoji(esc(p.title))}</div>`}
       <div class="post-body">${renderEmoji(esc(p.body))}</div>
-      ${p.image ? `<img class="post-image" src="${esc(p.image)}" onclick="openLightbox('${esc(p.image)}')" alt="">` : ''}
+      ${p.image ? `<img class="post-image" src="${esc(p.image)}" onclick="openLightbox('${escJs(p.image)}')" alt="">` : ''}
       ${isMine ? `
         <div class="post-actions">
           <button onclick="startEdit()" data-i18n="post.edit">Edit</button>
