@@ -1,0 +1,1067 @@
+/* =========================================================================
+   Hostaka Wiki — Vercel-inspired theme layer
+   Loaded last (after theme.css, shared.css, page CSS and emoji.css), so it
+   can retheme the existing markup without changing the page behaviour.
+
+   Design notes:
+   - Geist / Noto Sans Arabic, black-and-white surfaces, blue links.
+   - Flat borders and 8px radii instead of glass and large shadows.
+   - The existing light/dark toggle keeps working through [data-theme="dark"].
+   ========================================================================= */
+
+:root,
+html {
+  /* Brand / primary — Vercel's black-and-white button system */
+  --primary: #000000;
+  --primary-h: #333333;
+  --primary-light: #f5f5f5;
+  --primary-mid: #ededed;
+  --primary-border: #d4d4d4;
+  --primary-contrast: #ffffff;
+  --link: #0070f3;
+  --focus-ring: rgba(0, 112, 243, 0.18);
+  --accent: #0070f3;
+  --avatar-gradient: linear-gradient(135deg, #111111, #555555);
+
+  /* Surfaces / neutrals */
+  --black: #ffffff;
+  --dark: #fafafa;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --border: #eaeaea;
+  --text: #000000;
+  --muted: #666666;
+
+  /* Status */
+  --success: #0cce6b;
+  --warning: #f5a623;
+  --danger: #ee0000;
+
+  /* Type */
+  --font-family: 'Geist', 'Noto Sans Arabic', 'Inter', -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --font-weight-black: 700;
+
+  /* Geometry */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 8px;
+
+  /* Shadows — borders do most of the work in this theme */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* Surfaces used by menus, inputs and the emoji picker */
+  --modal-bg: #ffffff;
+  --input-bg: #ffffff;
+  --sidebar-bg: var(--glass-bg);
+  --topbar-bg: rgba(250, 250, 250, 0.82);
+  --post-bg: #ffffff;
+  --surface-elevated: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-strong: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --sort-btn-bg: #f5f5f5;
+  --badge-verified-fill: #000000;
+  --badge-verified-check: #ffffff;
+
+  --mine-bg: var(--primary);
+  --mine-border: var(--primary-border);
+  --their-bg: var(--card);
+  --their-border: var(--border);
+  --shizi-bg: var(--primary-light);
+  --shizi-border: var(--primary-border);
+  --shizi-gradient: var(--avatar-gradient);
+}
+
+[data-theme="dark"] {
+  --primary: #ffffff;
+  --primary-h: #e5e5e5;
+  --primary-light: #1a1a1a;
+  --primary-mid: #262626;
+  --primary-border: #404040;
+  --primary-contrast: #000000;
+  --link: #3291ff;
+  --focus-ring: rgba(50, 145, 255, 0.25);
+  --accent: #3291ff;
+  --avatar-gradient: linear-gradient(135deg, #333333, #777777);
+
+  --black: #000000;
+  --dark: #000000;
+  --bg: #000000;
+  --card: #0a0a0a;
+  --border: #262626;
+  --text: #ededed;
+  --muted: #888888;
+
+  --success: #0cce6b;
+  --warning: #f5a623;
+  --danger: #ff4d4d;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
+
+  --modal-bg: #0a0a0a;
+  --input-bg: #0a0a0a;
+  --topbar-bg: rgba(0, 0, 0, 0.82);
+  --post-bg: #0a0a0a;
+  --surface-elevated: #111111;
+  --glass-bg: rgba(10, 10, 10, 0.72);
+  --glass-bg-strong: rgba(10, 10, 10, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --sort-btn-bg: #1a1a1a;
+  --badge-verified-fill: #ffffff;
+  --badge-verified-check: #000000;
+
+  --mine-bg: var(--primary);
+  --mine-border: var(--primary-border);
+  --their-bg: var(--card);
+  --their-border: var(--border);
+  --shizi-bg: var(--primary-light);
+  --shizi-border: var(--primary-border);
+  --shizi-gradient: var(--avatar-gradient);
+}
+
+/* -------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] {
+  background-color: var(--bg);
+  background-image: radial-gradient(
+    ellipse 80% 50% at 50% -20%,
+    rgba(0, 0, 0, 0.04),
+    transparent
+  );
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.011em;
+}
+
+[data-theme="dark"] body[class*="page-wiki-"] {
+  background-image: radial-gradient(
+    ellipse 80% 50% at 50% -20%,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+}
+
+/* The page styles hardcode Ubuntu in a few places; keep the whole wiki on
+   the new type stack (including dynamically rendered forms). */
+body[class*="page-wiki-"] * {
+  font-family: var(--font-family) !important;
+}
+
+body[class*="page-wiki-"] :focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+body[class*="page-wiki-"] ::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* -------------------------------------------------------------------------
+   Top bar
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .topbar {
+  height: 64px;
+  background: var(--topbar-bg);
+  backdrop-filter: blur(12px) saturate(1.8);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  gap: 8px;
+}
+
+body[class*="page-wiki-"] .brand-wrap {
+  gap: 10px;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+body[class*="page-wiki-"] .brand-wrap img {
+  border-radius: 6px !important;
+}
+
+body[class*="page-wiki-"] .topbar-title {
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+body[class*="page-wiki-"] .icon-btn,
+body[class*="page-wiki-"] .back-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  transition: background var(--transition-fast),
+    border-color var(--transition-fast), color var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .icon-btn:hover,
+body[class*="page-wiki-"] .back-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .acc-row {
+  gap: 8px;
+}
+
+body[class*="page-wiki-"] .acc-name {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .acc-avatar,
+body[class*="page-wiki-"] .acc-avatar-fallback,
+body[class*="page-wiki-"] .post-avatar {
+  background: var(--avatar-gradient);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Dropdown menus */
+body[class*="page-wiki-"] .lang-menu {
+  min-width: 140px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--modal-bg);
+  box-shadow: var(--shadow-lg);
+}
+
+body[class*="page-wiki-"] .lang-menu button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: start;
+}
+
+body[class*="page-wiki-"] .lang-menu button:hover {
+  background: var(--primary-light);
+  color: var(--text);
+}
+
+/* Primary buttons */
+body[class*="page-wiki-"] .btn-new-post,
+body[class*="page-wiki-"] .btn-write,
+body[class*="page-wiki-"] .submit-btn,
+body[class*="page-wiki-"] .gate-btn,
+body[class*="page-wiki-"] .success-btn,
+body[class*="page-wiki-"] .reply-submit-btn,
+body[class*="page-wiki-"] .edit-form-actions .save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: background var(--transition-fast),
+    color var(--transition-fast), border-color var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .btn-new-post:hover,
+body[class*="page-wiki-"] .btn-write:hover,
+body[class*="page-wiki-"] .submit-btn:hover,
+body[class*="page-wiki-"] .gate-btn:hover,
+body[class*="page-wiki-"] .success-btn:hover,
+body[class*="page-wiki-"] .reply-submit-btn:hover,
+body[class*="page-wiki-"] .edit-form-actions .save-btn:hover {
+  background: var(--primary-h);
+  color: var(--primary-contrast);
+}
+
+body[class*="page-wiki-"] .submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* -------------------------------------------------------------------------
+   Shared page layout
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .wiki-wrap {
+  max-width: 760px;
+  padding: 48px 24px 80px;
+}
+
+body.page-wiki-post .wiki-wrap {
+  max-width: 720px;
+  padding-top: 40px;
+}
+
+body[class*="page-wiki-"] .new-wrap {
+  max-width: 640px;
+  padding: 48px 24px 80px;
+}
+
+body[class*="page-wiki-"] .page-heading {
+  margin-bottom: 12px;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+body[class*="page-wiki-"] .page-sub {
+  max-width: 560px;
+  margin-bottom: 32px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* -------------------------------------------------------------------------
+   Browse page
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .search-box {
+  margin-bottom: 28px;
+}
+
+body[class*="page-wiki-"] .search-box input {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  padding-inline-start: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  box-shadow: var(--shadow-sm);
+  outline: none;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .search-box input::placeholder {
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .search-box input:focus {
+  border-color: var(--link);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+body[class*="page-wiki-"] .search-box svg {
+  left: auto;
+  inset-inline-start: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .ext-card {
+  margin-bottom: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: none;
+  transition: background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .ext-card:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  box-shadow: none;
+}
+
+body[class*="page-wiki-"] .ext-name {
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+body[class*="page-wiki-"] .ext-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+body[class*="page-wiki-"] .ext-arrow {
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .empty-state {
+  padding: 96px 20px;
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .empty-state svg {
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+body[class*="page-wiki-"] .empty-state-title {
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------
+   Topic page
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .topic-head {
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+body[class*="page-wiki-"] .topic-name {
+  color: var(--text);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+body[class*="page-wiki-"] .topic-count {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+body[class*="page-wiki-"] .post-card {
+  display: block;
+  margin-bottom: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: none;
+  transition: background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .post-card:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  box-shadow: none;
+}
+
+body[class*="page-wiki-"] .post-author-row {
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+body[class*="page-wiki-"] .post-author-name {
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .post-date {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+body[class*="page-wiki-"] .post-title {
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+body[class*="page-wiki-"] .post-preview {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+body[class*="page-wiki-"] .post-footer {
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+body[class*="page-wiki-"] .admin-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* -------------------------------------------------------------------------
+   Single post page
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .breadcrumb {
+  margin-bottom: 20px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+body[class*="page-wiki-"] .breadcrumb a {
+  color: var(--link);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+body[class*="page-wiki-"] .breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+body[class*="page-wiki-"] .reply-banner {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--primary-light);
+  color: var(--text);
+  font-size: 0.8125rem;
+}
+
+body[class*="page-wiki-"] .reply-banner:hover {
+  border-color: var(--primary-border);
+}
+
+body[class*="page-wiki-"] .post-box {
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: none;
+}
+
+body[class*="page-wiki-"] .post-box .post-author-row {
+  margin-bottom: 14px;
+}
+
+body[class*="page-wiki-"] .post-box .post-title {
+  margin-bottom: 14px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+body[class*="page-wiki-"] .post-body {
+  margin-bottom: 16px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+body[class*="page-wiki-"] .post-image {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+body[class*="page-wiki-"] .post-actions {
+  gap: 8px;
+  margin-top: 14px;
+}
+
+body[class*="page-wiki-"] .post-actions button {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .post-actions button:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .post-actions button.danger:hover {
+  border-color: var(--danger);
+  background: transparent;
+  color: var(--danger);
+}
+
+body[class*="page-wiki-"] .edit-form textarea,
+body[class*="page-wiki-"] .edit-form input[type="text"],
+body[class*="page-wiki-"] .reply-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  outline: none;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .edit-form textarea:focus,
+body[class*="page-wiki-"] .edit-form input[type="text"]:focus,
+body[class*="page-wiki-"] .reply-form textarea:focus {
+  border-color: var(--link);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+body[class*="page-wiki-"] .edit-form textarea {
+  min-height: 120px;
+}
+
+body[class*="page-wiki-"] .edit-form-actions {
+  gap: 8px;
+}
+
+body[class*="page-wiki-"] .edit-form-actions button {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .edit-form-actions .save-btn {
+  height: 36px;
+  padding: 0 16px;
+}
+
+body[class*="page-wiki-"] .edit-form-actions .cancel-btn {
+  border: 1px solid var(--border) !important;
+  background: transparent;
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .edit-form-actions .cancel-btn:hover {
+  background: var(--primary-light);
+}
+
+body[class*="page-wiki-"] .section-title {
+  margin-bottom: 14px;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+body[class*="page-wiki-"] .reply-form {
+  margin-bottom: 20px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+body[class*="page-wiki-"] .reply-form textarea {
+  min-height: 90px;
+  margin-bottom: 10px;
+}
+
+body[class*="page-wiki-"] .reply-form-footer {
+  gap: 10px;
+}
+
+body[class*="page-wiki-"] .reply-image-btn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+body[class*="page-wiki-"] .reply-image-btn:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .reply-submit-btn {
+  height: 36px;
+  padding: 0 16px;
+}
+
+body[class*="page-wiki-"] .reply-preview {
+  border-radius: 6px;
+}
+
+body[class*="page-wiki-"] .login-hint {
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--primary-light);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+body[class*="page-wiki-"] .login-hint a {
+  color: var(--link);
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .reply-item {
+  margin-bottom: 0;
+  padding: 14px 0;
+  padding-inline-start: 16px;
+  border-right: 0;
+  border-inline-start: 1px solid var(--border);
+}
+
+body[class*="page-wiki-"] .reply-item .post-author-row {
+  margin-bottom: 6px;
+}
+
+body[class*="page-wiki-"] .reply-item .post-body {
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+}
+
+body[class*="page-wiki-"] .reply-item-footer {
+  gap: 10px;
+}
+
+body[class*="page-wiki-"] .reply-item-footer a,
+body[class*="page-wiki-"] .reply-item-footer button {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .reply-item-footer a:hover,
+body[class*="page-wiki-"] .reply-item-footer button:hover {
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .not-found {
+  padding: 96px 20px;
+}
+
+body[class*="page-wiki-"] .lightbox-close {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* -------------------------------------------------------------------------
+   New post page
+   ------------------------------------------------------------------------- */
+body.page-wiki-new .page-heading {
+  margin-bottom: 32px;
+  font-size: 1.75rem;
+}
+
+body[class*="page-wiki-"] .field {
+  margin-bottom: 24px;
+}
+
+body[class*="page-wiki-"] .field label {
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .field input[type="text"],
+body[class*="page-wiki-"] .field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  box-shadow: var(--shadow-sm);
+  outline: none;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+body[class*="page-wiki-"] .field input[type="text"]:focus,
+body[class*="page-wiki-"] .field textarea:focus {
+  border-color: var(--link);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+body[class*="page-wiki-"] .field textarea {
+  min-height: 180px;
+  padding-bottom: 44px;
+}
+
+body[class*="page-wiki-"] .field-hint {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+body[class*="page-wiki-"] .image-picker {
+  gap: 16px;
+}
+
+body[class*="page-wiki-"] .image-preview {
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--primary-light);
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .upload-btn {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+body[class*="page-wiki-"] .upload-btn:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .submit-btn {
+  width: 100%;
+  height: 44px;
+  font-size: 0.875rem;
+}
+
+body[class*="page-wiki-"] .gate-box,
+body[class*="page-wiki-"] .success-box {
+  padding: 72px 20px;
+}
+
+body[class*="page-wiki-"] .gate-box svg,
+body[class*="page-wiki-"] .success-box svg {
+  color: var(--text);
+}
+
+body[class*="page-wiki-"] .gate-box-title,
+body[class*="page-wiki-"] .success-box-title {
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+body[class*="page-wiki-"] .gate-box-desc,
+body[class*="page-wiki-"] .success-box-desc {
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+body[class*="page-wiki-"] .gate-btn,
+body[class*="page-wiki-"] .success-btn {
+  height: 40px;
+  padding: 0 18px;
+}
+
+/* -------------------------------------------------------------------------
+   Emoji picker
+   ------------------------------------------------------------------------- */
+.femoji-picker {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--modal-bg);
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-family);
+}
+
+[data-theme="dark"] .femoji-picker {
+  border-color: var(--border);
+  background: var(--modal-bg);
+  color: var(--text);
+}
+
+.femoji-picker-search,
+[data-theme="dark"] .femoji-picker-search {
+  border-bottom-color: var(--border);
+}
+
+.femoji-search-input,
+[data-theme="dark"] .femoji-search-input {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+.femoji-search-input:focus {
+  border-color: var(--link);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.femoji-picker-tabs,
+[data-theme="dark"] .femoji-picker-tabs {
+  border-bottom-color: var(--border);
+}
+
+.femoji-tab {
+  border-radius: 6px;
+}
+
+.femoji-tab:hover,
+.femoji-tab.active,
+.femoji-item:hover {
+  background: var(--primary-light);
+}
+
+.femoji-item {
+  border-radius: 6px;
+}
+
+.femoji-empty {
+  color: var(--muted);
+}
+
+body[class*="page-wiki-"] .btn-icon-sm.femoji-comment-btn:hover {
+  background: var(--primary-light);
+}
+
+/* -------------------------------------------------------------------------
+   Toasts and loading
+   ------------------------------------------------------------------------- */
+body[class*="page-wiki-"] .toast {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+}
+
+body[class*="page-wiki-"] .toast.toast-error {
+  border-color: transparent;
+  background: var(--danger);
+  color: #ffffff;
+}
+
+body[class*="page-wiki-"] .loader {
+  background: var(--bg);
+}
+
+body[class*="page-wiki-"] .spinner {
+  width: 26px;
+  height: 26px;
+  border-width: 2px;
+  border-color: var(--border);
+  border-top-color: var(--text);
+}
+
+/* -------------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  body[class*="page-wiki-"] .wiki-wrap,
+  body[class*="page-wiki-"] .new-wrap {
+    padding: 32px 16px 64px;
+  }
+
+  body[class*="page-wiki-"] .page-heading {
+    font-size: 1.75rem;
+  }
+
+  body.page-wiki-topic .topic-name {
+    font-size: 1.5rem;
+  }
+
+  body[class*="page-wiki-"] .post-box {
+    padding: 18px;
+  }
+
+  body[class*="page-wiki-"] .post-box .post-title {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 560px) {
+  body[class*="page-wiki-"] .topbar {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  body[class*="page-wiki-"] .brand-wrap span,
+  body[class*="page-wiki-"] .acc-name {
+    display: none;
+  }
+
+  body[class*="page-wiki-"] .btn-new-post {
+    width: 38px;
+    padding: 0;
+  }
+
+  body[class*="page-wiki-"] .btn-new-post span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[class*="page-wiki-"] *,
+  body[class*="page-wiki-"] *::before,
+  body[class*="page-wiki-"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
