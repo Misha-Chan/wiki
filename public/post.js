@@ -54,9 +54,9 @@ function renderPostBox(p, extension){
     <div class="post-box" id="postBox">
       ${authorRowHtml(p)}
       ${p.is_comment
-        ? `<div class="post-title" style="font-size:0.95rem;">${t('post.replyTo')} @${esc(p.mentioned_username||'')}</div>`
-        : `<div class="post-title">${renderEmoji(esc(p.title))}</div>`}
-      <div class="post-body">${renderEmoji(esc(p.body))}</div>
+        ? `<div class="post-title" dir="auto" style="font-size:0.95rem;">${t('post.replyTo')} @${esc(p.mentioned_username||'')}</div>`
+        : `<div class="post-title" dir="auto">${renderEmoji(esc(p.title))}</div>`}
+      <div class="post-body" dir="auto">${renderEmoji(esc(p.body))}</div>
       ${p.image ? `<img class="post-image" src="${esc(p.image)}" onclick="openLightbox('${escJs(p.image)}')" alt="">` : ''}
       ${isMine ? `
         <div class="post-actions">
@@ -134,7 +134,7 @@ function replyItemHtml(extension, r){
         ${r.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
         <span class="post-date">${fmtDate(r.created_at)}</span>
       </div>
-      <div class="post-body">${renderEmoji(esc(r.body))}</div>
+      <div class="post-body" dir="auto">${renderEmoji(esc(r.body))}</div>
       ${r.image ? `<img src="${esc(r.image)}" style="max-width:110px;border-radius:8px;display:block;margin-bottom:6px;">` : ''}
       <div class="reply-item-footer">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -221,6 +221,8 @@ async function loadPost(){
     if (!post || post.error) { renderNotFound(); document.getElementById('loader').style.display = 'none'; return; }
     CURRENT_POST = post;
     document.title = post.is_comment ? `${t('post.replyTo')} @${post.mentioned_username} · Hostaka Wiki` : `${post.title} · Hostaka Wiki`;
+    const topbarTitle = document.getElementById('topbarTitle');
+    if (topbarTitle) topbarTitle.textContent = post.is_comment ? `${t('post.replyTo')} @${post.mentioned_username}` : post.title;
     renderPostBox(post, extension);
     document.getElementById('sectionTitleWrap').style.display = '';
     renderReplyFormArea();

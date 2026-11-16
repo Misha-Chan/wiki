@@ -14,7 +14,19 @@
     "save": "حفظ",
     "toggleTheme": "تبديل الثيم",
     "logout": "تسجيل الخروج",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "wiki": "الويكي",
+    "browse": "تصفح",
+    "newPost": "منشور جديد",
+    "ecosystem": "المنظومة",
+    "laps": "LAPS",
+    "panya": "Panya",
+    "hostaka": "هوستاكا",
+    "source": "المصدر",
+    "post": "منشور",
+    "topic": "موضوع",
+    "allSystems": "كل الأنظمة تعمل",
+    "openMenu": "فتح القائمة"
   },
   "browse": {
     "title": "ويكي هوستاكا",

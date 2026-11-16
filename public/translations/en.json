@@ -14,7 +14,19 @@
     "save": "Save",
     "toggleTheme": "Toggle theme",
     "logout": "Log out",
-    "login": "Log in"
+    "login": "Log in",
+    "wiki": "Wiki",
+    "browse": "Browse",
+    "newPost": "New post",
+    "ecosystem": "Ecosystem",
+    "laps": "LAPS",
+    "panya": "Panya",
+    "hostaka": "Hostaka",
+    "source": "Source",
+    "post": "Post",
+    "topic": "Topic",
+    "allSystems": "All systems normal",
+    "openMenu": "Open menu"
   },
   "browse": {
     "title": "Hostaka Wiki",

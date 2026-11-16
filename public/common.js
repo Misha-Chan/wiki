@@ -21,16 +21,14 @@ const HOSTAKA_MAIN = 'https://hostaka.fun';
 function goToLogin(){ window.location = HOSTAKA_MAIN + '/login?next=' + encodeURIComponent(window.location.href); }
 
 // ===== الثيم =====
-const THEME_ICON_DARK = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-const THEME_ICON_LIGHT = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
-let currentTheme = localStorage.getItem('hostaka_theme') || 'light';
+// الافتراضي داكن مثل LAPS/Panya. السكربت المضمّن في <head> يطبّق القيمة
+// المحفوظة قبل تحميل CSS حتى لا تومض الصفحة بالثيم الفاتح.
+let currentTheme = localStorage.getItem('hostaka_theme') || 'dark';
 function setTheme(theme){
   const html = document.documentElement;
-  if (theme === 'dark') html.setAttribute('data-theme', 'dark'); else html.removeAttribute('data-theme');
+  html.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
   currentTheme = theme;
   localStorage.setItem('hostaka_theme', theme);
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.innerHTML = theme === 'dark' ? THEME_ICON_DARK : THEME_ICON_LIGHT;
 }
 function toggleTheme(){ setTheme(currentTheme === 'light' ? 'dark' : 'light'); }
 setTheme(currentTheme);
@@ -199,3 +197,45 @@ async function uploadImage(file, maxDim = 1600){
   if (!d || !d.url) throw new Error(d?.error || 'upload failed');
   return d.url;
 }
+
+// ===== OpenClaw shell: القائمة الجانبية + اختصار البحث =====
+(function initWikiShell(){
+  function init(){
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar && toggle) {
+      const close = () => {
+        sidebar.classList.remove('open');
+        overlay?.classList.remove('show');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('sidebar-open');
+      };
+      const open = () => {
+        sidebar.classList.add('open');
+        overlay?.classList.add('show');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('sidebar-open');
+      };
+      toggle.addEventListener('click', () => {
+        if (sidebar.classList.contains('open')) close(); else open();
+      });
+      overlay?.addEventListener('click', close);
+      sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    }
+
+    document.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && String(e.key).toLowerCase() === 'k') {
+        const search = document.getElementById('searchInput');
+        if (search) {
+          e.preventDefault();
+          search.focus();
+          search.select();
+        }
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
