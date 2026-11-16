@@ -53,4 +53,5 @@ async function init(){
   await loadExtensions('');
   document.getElementById('loader').style.display = 'none';
 }
+document.addEventListener('hostaka:langchange', () => { loadExtensions(); });
 init();

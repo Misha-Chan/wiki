@@ -22,8 +22,8 @@ function postCardHtml(ext, p){
         ${p.author.is_admin ? `<span class="admin-badge">admin</span>` : ''}
         <span class="post-date">${timeAgoOrDate(p.created_at)}</span>
       </div>
-      <div class="post-title">${renderEmoji(esc(p.title))}</div>
-      <div class="post-preview">${renderEmoji(esc(p.body))}</div>
+      <div class="post-title" dir="auto">${renderEmoji(esc(p.title))}</div>
+      <div class="post-preview" dir="auto">${renderEmoji(esc(p.body))}</div>
       <div class="post-footer">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         ${p.comments_count || 0}
@@ -36,6 +36,8 @@ async function loadTopic(){
   if (!ext) { window.location.href = '/'; return; }
 
   document.getElementById('topicName').textContent = ext;
+  const topbarTitle = document.getElementById('topbarTitle');
+  if (topbarTitle) topbarTitle.textContent = ext;
   document.title = `${ext} · Hostaka Wiki`;
   document.getElementById('writeBtn').href = '/new?ext=' + encodeURIComponent(ext);
 
@@ -62,5 +64,6 @@ async function loadTopic(){
   document.getElementById('loader').style.display = 'none';
 }
 
+document.addEventListener('hostaka:langchange', () => { loadTopic(); });
 initAuthArea();
 loadTopic();
