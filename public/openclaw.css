@@ -1103,10 +1103,6 @@ body.page-wiki-post .login-hint a {
 }
 
 @media (max-width: 560px) {
-  .topbar-actions > a.icon-btn[href*="github"] {
-    display: none;
-  }
-
   body.page-wiki-browse .page-heading,
   body.page-wiki-new .page-heading {
     font-size: 1.8rem;
